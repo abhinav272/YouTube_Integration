@@ -14,4 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
+    <Button
+        android:id="@+id/btn_play_pause"
+        android:text="play"
+        android:textAllCaps="true"
+        android:layout_below="@+id/webview"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:text="Stop"
+        android:layout_below="@+id/webview"
+        android:layout_toRightOf="@+id/btn_play_pause"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
