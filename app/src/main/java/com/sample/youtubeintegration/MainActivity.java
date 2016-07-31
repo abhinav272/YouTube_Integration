@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.size(); i++) {
                             try {
                                 String videoId = jsonArray.get(i).getAsJsonObject().get("id").getAsJsonObject().get("videoId").getAsString();
-                                String thumbnailUrl = jsonArray.get(i).getAsJsonObject().get("snippet").getAsJsonObject().get("thumbnails").getAsJsonObject().get("medium").getAsJsonObject().get("url").getAsString();
+                                String thumbnailUrl = jsonArray.get(i).getAsJsonObject().get("snippet").getAsJsonObject().get("thumbnails").getAsJsonObject().get("default").getAsJsonObject().get("url").getAsString();
                                 String title = jsonArray.get(i).getAsJsonObject().get("snippet").getAsJsonObject().get("title").getAsString();
                                 list.add(new YouTubeDataInfo(title, videoId, thumbnailUrl));
                             } catch (Exception e) {

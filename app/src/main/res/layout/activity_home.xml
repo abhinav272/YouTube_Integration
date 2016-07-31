@@ -10,9 +10,10 @@
     tools:context="com.sample.youtubeintegration.HomeActivity">
 
     <WebView
+        android:layout_centerHorizontal="true"
         android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_width="336dp"
+        android:layout_height="189dp"/>
 
     <Button
         android:id="@+id/btn_play_pause"
@@ -25,6 +26,7 @@
     <Button
         android:id="@+id/btn_stop"
         android:text="Stop"
+        android:textAllCaps="true"
         android:layout_below="@+id/webview"
         android:layout_toRightOf="@+id/btn_play_pause"
         android:layout_width="100dp"

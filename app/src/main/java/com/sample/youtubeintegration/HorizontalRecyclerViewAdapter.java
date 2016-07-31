@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -61,6 +62,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(myHolder.iv);
 
+            myHolder.tv.setText(mHorizontalList.get(position).getTitle());
             myHolder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,12 +79,16 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public class MyHolder extends RecyclerView.ViewHolder {
         public ImageView iv;
+        public TextView tv;
         public MyHolder(View itemView) {
             super(itemView);
 
+            tv = (TextView) itemView.findViewById(R.id.video_title);
             iv = (ImageView) itemView.findViewById(R.id.video_item);
         }
     }
+
+
 
 
     private void initializeWebView() {
@@ -115,7 +121,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private String getFormedLinkForYouTube(String videoToken) {
-        String html = "<iframe width=\"300\" height=\"300\" src=\"https://www.youtube.com/embed/"+
+        String html = "<iframe width=\"336\" height=\"189\" src=\"https://www.youtube.com/embed/"+
                 videoToken+"?rel=0&amp;controls=0&amp;showinfo=0\" frameborder=\"0\" allowfullscreen></iframe>";
 
         return html;
