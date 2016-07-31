@@ -32,6 +32,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private WebView mWebView;
     private Button mPlayPause;
     private Button mStop;
+    private boolean dispatchEvents = false;
 
     public HorizontalRecyclerViewAdapter(Context mContext, List<YouTubeDataInfo> mHorizontalList) {
         this.mContext = mContext;
@@ -99,14 +100,26 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         mWebView.getSettings().setUserAgentString("Android");
+        mWebView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (dispatchEvents){
+                    dispatchEvents = false;
+                    return false;
+                }
+                return true;
+            }
+        });
         mWebView.setWebChromeClient(new WebChromeClient());
 
         mPlayPause.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mWebView.dispatchTouchEvent(event);
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    dispatchEvents = true;
+                    mWebView.dispatchTouchEvent(event);
                     togglePlayPause();
+                }
                 return false;
             }
         });
