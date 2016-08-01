@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -100,25 +101,29 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         mWebView.getSettings().setUserAgentString("Android");
+
+        mWebView.setWebChromeClient(new WebChromeClient());
+
         mWebView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (dispatchEvents){
+                if(dispatchEvents){
                     dispatchEvents = false;
+                    if(event.getAction() == MotionEvent.ACTION_UP)
+                        togglePlayPause();
                     return false;
                 }
                 return true;
             }
         });
-        mWebView.setWebChromeClient(new WebChromeClient());
 
         mPlayPause.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP){
                     dispatchEvents = true;
                     mWebView.dispatchTouchEvent(event);
-                    togglePlayPause();
                 }
                 return false;
             }
@@ -155,6 +160,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         currentPlayingVideoId = mHorizontalList.get(position).getVideoId();
         String html = getFormedLinkForYouTube(currentPlayingVideoId);
         mWebView.loadDataWithBaseURL("",html,"text/html", "utf-8","");
+        mPlayPause.setText("play");
     }
 
 }

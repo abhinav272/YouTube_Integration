@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.webkit.WebView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String order = "date";
     public static final int maxResults = 50;
 
+    private WebView mWebView;
+
     private List<YouTubeDataItem> verticalList;
     private VerticalRecyclerViewAdapter mAdapter;
     private RecyclerView mVerticalRecyclerView;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         verticalList = new ArrayList<>();
         mVerticalRecyclerView = (RecyclerView) findViewById(R.id.vertical_recycler_view);
+
+        mWebView = (WebView) findViewById(R.id.webview);
 
         mAdapter = new VerticalRecyclerViewAdapter(this, verticalList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -96,5 +101,23 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("no");
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mWebView.destroy();
+        super.onDestroy();
     }
 }
