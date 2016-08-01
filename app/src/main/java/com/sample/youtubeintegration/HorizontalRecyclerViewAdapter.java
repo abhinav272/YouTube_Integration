@@ -2,6 +2,7 @@ package com.sample.youtubeintegration;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private WebView mWebView;
     private Button mPlayPause;
     private Button mStop;
+    private boolean isWebPageLoaded;
     private boolean dispatchEvents = false;
 
     public HorizontalRecyclerViewAdapter(Context mContext, List<YouTubeDataInfo> mHorizontalList) {
@@ -102,7 +105,26 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         mWebView.getSettings().setUserAgentString("Android");
 
-        mWebView.setWebChromeClient(new WebChromeClient());
+//        mWebView.setWebChromeClient(new WebChromeClient());
+
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                isWebPageLoaded = false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                isWebPageLoaded = true;
+            }
+        });
 
         mWebView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -120,10 +142,11 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mPlayPause.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP){
-                    dispatchEvents = true;
-                    mWebView.dispatchTouchEvent(event);
+                if (isWebPageLoaded) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP) {
+                        dispatchEvents = true;
+                        mWebView.dispatchTouchEvent(event);
+                    }
                 }
                 return false;
             }
@@ -132,8 +155,10 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String html = getFormedLinkForYouTube(currentPlayingVideoId);
-                mWebView.loadDataWithBaseURL("",html,"text/html", "utf-8","");
+                if (isWebPageLoaded) {
+                    String html = getFormedLinkForYouTube(currentPlayingVideoId);
+                    mWebView.loadDataWithBaseURL("", html, "text/html", "utf-8", "");
+                }
             }
         });
     }
